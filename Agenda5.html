@@ -1,0 +1,187 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <html>
+    <head>
+      <title>CUADRADO</title>
+      <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+      <link rel="stylesheet" type="text/css" href=""/>
+      
+    </head>
+    <body>
+<form id="formulario" name="formulario">
+ Nombre:  <input type="text" name="nombre" id="nombre"><br>
+ Telefono:<input type="text"  name="telefono" id="telefono"> <br>
+ Mail:    <input type="text"  name="mail" id="mail"> <br><br>
+<input type="button" value="Añadir Contacto" id="enviar">
+<form>
+
+
+
+
+<script type="text/javascript">
+	    var enviar=document.getElementById("enviar");
+		enviar.addEventListener("click",agregar);
+		console.log(localStorage.getItem("agenda"))
+		window.onload=function(){
+		if(localStorage.getItem("agenda") == 0){}
+		else{
+		
+	
+		 
+	var tarean2 = localStorage.getItem("agenda");
+	var tarea_json_recibo=JSON.parse(tarean2);
+	for(var i=0; i < tarea_json_recibo.length;i++){
+	console.log(tarea_json_recibo[i].nombre+"-"+tarea_json_recibo[i].telefono+"-"+tarea_json_recibo[i].mail)
+	 var listas=document.getElementById("memoria"); 
+	var nuevos=document.createElement("p");
+	nuevos.innerHTML=(tarea_json_recibo[i].nombre+"-"+tarea_json_recibo[i].telefono+"-"+tarea_json_recibo[i].mail);
+	listas.appendChild(nuevos);
+	}
+	}	
+	}	
+		var agenda=[];
+		 uno=document.forms.formulario.nombre.value;
+		 dos=document.forms.formulario.telefono.value;
+		 tres=document.forms.formulario.mail.value;
+		
+	function agregar(){	
+		 var uno=document.forms.formulario.nombre.value;
+		 var dos=document.forms.formulario.telefono.value;
+		 var tres=document.forms.formulario.mail.value;
+		 
+		 var numero=agenda.length; //doy la posicion del array
+		 agenda.push({nombre:uno,telefono:dos,mail:tres}); //creo el array
+console.log(agenda)		
+		 lista=document.getElementById("lista"); //recojo la ul
+		 nuevo=document.createElement("li"); //creol i 
+		 nuevo.setAttribute("id", "anido"+numero); //defino un id distinto a cada li
+		
+		 
+		 var ref=document.createElement("a"); //creo a
+		 ref.setAttribute("href","#");      //le defino un atributo
+		 ref.setAttribute("id",(numero+"nombre")); //le defino un atributo
+		 ref.innerHTML=uno;  //le meto dentro un valor para verlo en html
+		 
+		 var ref2=document.createElement("span"); //igual que antes
+		 ref2.innerHTML=("&nbsp --- &nbsp");
+		 
+		 var ref3=document.createElement("a"); //igual que antes
+		 ref3.setAttribute("href","#");
+		 ref3.setAttribute("id",(numero+"borrar"));
+		 ref3.innerHTML=("Borrar");
+		 
+		 var ref4=document.createElement("span"); //igual que antes
+		 ref4.innerHTML=("&nbsp --- &nbsp");
+		 
+		 var ref5=document.createElement("a"); //igual que antes
+		 ref5.setAttribute("href","#");
+		 ref5.setAttribute("id",(numero+"modificar")); 
+		 ref5.innerHTML=("Modificar");
+		 
+		
+		
+	     lista.appendChild(nuevo); //creo los li dentro de ul
+		 nuevo.appendChild(ref);  //crero el a dentro de li
+		 nuevo.appendChild(ref2);  //igual 
+		 nuevo.appendChild(ref3);  //igual 
+		 nuevo.appendChild(ref4);  //igual 
+		 nuevo.appendChild(ref5);  //igual 
+		 
+		 ref.addEventListener("click",function (){manejador(numero)}); //si clico en 
+		 //un elemento me va al manejador para verlo
+		 ref3.addEventListener("click",function (){borrarElemento(numero)}); //le doy la posicion a la li href
+			//si pongo click y manejador(numero) me hace la funcion directamente y me da error
+		 
+		 ref5.addEventListener("click",function (){cambiar(numero)}); //si clico en 
+		 //un elemento me va al manejador para verlo
+
+		 
+	//Almacenamiento local, cada variable en un sitio,
+	// esto es asi porque el almacenamiento local solo recibe string,
+	// no recibe objetos, el array es un objeto
+	    localStorage.setItem('nombre',uno);
+		localStorage.setItem('telefono',dos);
+	    localStorage.setItem('mail',tres);
+	  
+		 var tarean = localStorage.getItem("nombre");
+		 var tareat = localStorage.getItem("telefono");
+		 var taream = localStorage.getItem("mail");
+		
+		  console.log(tarean+"-"+tareat+"-"+taream);
+
+	//para meter el array agenda lo debo convertir en json
+	//envio
+	var tarea_json_envio= JSON.stringify(agenda);
+	localStorage.setItem('agenda',tarea_json_envio);
+	console.log(tarea_json_envio)
+ 
+	// recibo
+	 var listas=document.getElementById("memoria"); 
+	 var nuevos=document.createElement("p");
+	 
+	var tarean2 = localStorage.getItem("agenda");
+	var tarea_json_recibo=JSON.parse(tarean2);
+	for(var i=0; i < tarea_json_recibo.length;i++){
+	console.log(tarea_json_recibo[i].nombre+"-"+tarea_json_recibo[i].telefono+"-"+tarea_json_recibo[i].mail)
+	nuevos.innerHTML=(tarea_json_recibo[i].nombre+"-"+tarea_json_recibo[i].telefono+"-"+tarea_json_recibo[i].mail);
+	listas.appendChild(nuevos);
+	}
+
+
+		 
+		 }
+	
+
+
+	
+		
+	function manejador(numero){
+	  borrar();//llamo a esta funcion para quitar todas las "li"
+		lista2=document.getElementById("id"); //dentro del div recojo
+		nuevo2=document.createElement("p"); //creo un parrafo
+		nuevo2.setAttribute("style","float:right;border:1px double blue;"); //al parrafo le doy atributos
+		nuevo2.innerHTML=(agenda[numero].nombre+"--"+agenda[numero].telefono+"--"+agenda[numero].mail); //le pongo los datos
+		lista2.appendChild(nuevo2);	//añado p al div		
+		//nuevo2.addEventListener("click",function(){borrar(numero)});
+		nuevo2.addEventListener("click",borrar);
+	}	
+
+	function borrar(){
+		var nuevo3=document.getElementsByTagName("p");
+		for(var i=0;i<nuevo3.length;i++){
+		nuevo3[i].parentNode.removeChild(nuevo3[i]);
+		}
+	}
+		
+	function borrarElemento(numero){
+		delete agenda[numero];
+		document.getElementById(numero+"nombre").remove();
+		document.getElementById(numero+"borrar").remove();
+	    document.getElementById(numero+"modificar").remove();
+		document.getElementById("anido"+numero).remove(); //quito el li en concreto
+	
+	}
+	
+	function cambiar(numero){ //para modificar elemeno
+	agenda.splice(numero,1); //borro posicion
+    agenda.splice(numero, 0,({nombre:uno,telefono:dos,mail:tres})); //añado posicion
+	console.log(agenda);
+	borrarElemento(numero); //borro el elemento del li
+	agregar(); //agrego li
+	}
+
+		
+
+</script>
+   <ul id="lista">
+	
+	</ul>
+    <div id="id"> 
+	
+	</div>
+	 <div id="memoria"> 
+	
+	</div>
+	
+
+    </body>
+  </html>
